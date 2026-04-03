@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI - Premium AI Analyzer</title>
+    <!-- Modern typography for premium look -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js for resume rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+
+<body>
+    <!-- Premium background elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="app-container glass-panel">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+                    <span class="logo-text">ResumeAI<span class="dot-accent">.</span></span>
+                </a>
+            </div>
+
+            <nav class="side-nav">
+                <ul id="nav-list">
+                    <li class="nav-item active" data-target="dashboard-tab">
+                        <a href="#"><i class="fa-solid fa-qrcode"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="nav-item" data-target="my-resumes-tab">
+                        <a href="#"><i class="fa-regular fa-folder-open"></i> <span>My Resumes</span></a>
+                    </li>
+                    <li class="nav-item" data-target="cover-letter-tab">
+                        <a href="#"><i class="fa-solid fa-pen-nib"></i> <span>Cover Letters</span></a>
+                    </li>
+                    <li class="nav-item" data-target="linkedin-tab">
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i> <span>LinkedIn Review</span></a>
+                    </li>
+                    <li class="nav-item" data-target="job-tracker-tab">
+                        <a href="#"><i class="fa-solid fa-crosshairs"></i> <span>Job Tracker</span></a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="upgrade-card premium-gradient-bg">
+                    <div class="card-glow"></div>
+                    <i class="fa-solid fa-crown crown-icon"></i>
+                    <h4>Pro Plan</h4>
+                    <p>Unlimited AI Credits</p>
+                    <button class="btn-upgrade" onclick="openUpgradeModal()">Upgrade</button>
+                </div>
+                
+                <div class="user-mini-profile">
+                    <div class="avatar"><img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User"></div>
+                    <div class="user-info">
+                        <strong>User</strong>
+                        <span>Free Plan</span>
+                    </div>
+                    <button class="settings-btn nav-item" data-target="settings-tab" title="Settings"><i class="fa-solid fa-gear"></i></button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-bar glass-input">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search insights, documents, or jobs...">
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn"><i class="fa-regular fa-bell"></i><span class="badge-dot"></span></button>
+                    <button class="theme-toggle" id="theme-toggle"><i class="fa-regular fa-moon"></i></button>
+                    <button class="btn-primary btn-small new-scan-btn"><i class="fa-solid fa-plus"></i> New Scan</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content Container (Router Outlet) -->
+            <div class="content-body wrapper-relative">
+
+                <!-- ============================ -->
+                <!-- 1. DASHBOARD TAB (Analyzer)  -->
+                <!-- ============================ -->
+                <div id="dashboard-tab" class="spa-tab active">
+                    
+                    <!-- View 1: Upload View -->
+                    <section id="upload-view" class="view-section active fade-in">
+                        <div class="welcome-banner glass-card">
+                            <div class="banner-content">
+                                <h1>Welcome back! 👋</h1>
+                                <p>Ready to land your dream job? Let's analyze your resume against ATS algorithms.</p>
+                            </div>
+                            <div class="banner-illustration">
+                                <i class="fa-solid fa-rocket"></i>
+                            </div>
+                        </div>
+
+                        <div class="upload-container glass-card">
+                            <div class="upload-header">
+                                <h2>AI Resume Analysis</h2>
+                                <span class="badge-pro">Highly Accurate</span>
+                            </div>
+                            <div class="drop-zone" id="drop-zone">
+                                <div class="upload-icon pulse-animation">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                </div>
+                                <h3>Drag & drop your resume</h3>
+                                <p>We support PDF, DOC, DOCX parsing naturally.</p>
+                                <input type="file" id="file-input" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" hidden>
+                                <button class="btn-primary rounded-btn" onclick="document.getElementById('file-input').click()">Browse Files</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- View 2: Analyzing State -->
+                    <section id="analyzing-view" class="view-section hidden">
+                        <div class="analyzing-container glass-card centered">
+                            <div class="ai-loader-ring">
+                                <div class="ring-core"></div>
+                                <div class="ring-orbit"></div>
+                            </div>
+                            <h2 class="gradient-text">Gemini AI is analyzing...</h2>
+                            <p class="subtitle text-light">Scanning 50+ ATS parameters</p>
+
+                            <div class="analysis-steps">
+                                <div class="step pending" id="step-1"><div class="step-icon"></div> Reading semantics</div>
+                                <div class="step pending" id="step-2"><div class="step-icon"></div> Evaluating impact vectors</div>
+                                <div class="step pending" id="step-3"><div class="step-icon"></div> ATS formatting checks</div>
+                                <div class="step pending" id="step-4"><div class="step-icon"></div> Finalizing insights</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- View 3: Dashboard Results State -->
+                    <section id="results-view" class="view-section hidden fade-in">
+                        <div class="results-header flex-between">
+                            <div>
+                                <h1 class="gradient-text">Analysis Complete</h1>
+                                <p id="analyzed-filename" class="subtitle text-light">Document.pdf</p>
+                            </div>
+                            <button class="btn-outline rounded-btn new-scan-btn"><i class="fa-solid fa-redo"></i> Analyze Another</button>
+                        </div>
+
+                        <div class="results-grid">
+                            <!-- Overall Score -->
+                            <div class="score-card glass-card">
+                                <h3>Overall ATS Score</h3>
+                                <div class="circular-progress-container">
+                                    <div class="circular-progress" id="overall-progress">
+                                        <div class="inner-circle">
+                                            <span id="overall-score-text">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="score-status" id="score-status">Excellent</p>
+                                <p class="score-desc">Your resume is in the top 15% of candidates for formatting and impact.</p>
+                            </div>
+
+                            <!-- Metrics -->
+                            <div class="metrics-card glass-card">
+                                <h3>Parameter Breakdown</h3>
+                                <div class="metrics-list">
+                                    <div class="metric-item">
+                                        <div class="metric-info"><span class="metric-name"><i class="fa-solid fa-bolt text-accent-1"></i> Impact</span><span id="impact-score">8/10</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill bg-accent-1" id="impact-bar" style="width:0%"></div></div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-info"><span class="metric-name"><i class="fa-solid fa-compress text-accent-2"></i> Brevity</span><span id="brevity-score">6/10</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill bg-accent-2" id="brevity-bar" style="width:0%"></div></div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-info"><span class="metric-name"><i class="fa-solid fa-wand-magic-sparkles text-accent-3"></i> Style</span><span id="style-score">9/10</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill bg-accent-3" id="style-bar" style="width:0%"></div></div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="metric-info"><span class="metric-name"><i class="fa-solid fa-list-check text-accent-4"></i> Sections</span><span id="section-score">10/10</span></div>
+                                        <div class="progress-bar-bg"><div class="progress-bar-fill bg-accent-4" id="section-bar" style="width:0%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback -->
+                        <div class="feedback-container glass-card mt-24">
+                            <div class="flex-between mb-16">
+                                <h3><i class="fa-solid fa-robot"></i> Actionable Insights</h3>
+                                <div class="feedback-filters">
+                                    <button class="filter-btn active" data-filter="all">All</button>
+                                    <button class="filter-btn" data-filter="critical">Critical</button>
+                                    <button class="filter-btn" data-filter="warning">Warnings</button>
+                                </div>
+                            </div>
+                            <div class="feedback-list" id="feedback-list"></div>
+                        </div>
+                    </section>
+                </div>
+
+
+                <!-- ============================ -->
+                <!-- 2. MY RESUMES TAB            -->
+                <!-- ============================ -->
+                <div id="my-resumes-tab" class="spa-tab hidden fade-in">
+                    <div class="flex-between mb-24">
+                        <div>
+                            <h1>My Document Vault</h1>
+                            <p class="text-light">Your previously analyzed resumes and their scores.</p>
+                        </div>
+                        <button class="btn-primary new-scan-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Upload New</button>
+                    </div>
+                    
+                    <div id="resumes-container" class="resumes-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+
+                <!-- ============================ -->
+                <!-- 3. COVER LETTER TAB          -->
+                <!-- ============================ -->
+                <div id="cover-letter-tab" class="spa-tab hidden fade-in">
+                    <div class="welcome-banner glass-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(168, 85, 247, 0.1));">
+                        <h1>AI Cover Letter Generator ✨</h1>
+                        <p class="text-light">Hyper-personalized cover letters targeting the exact job description.</p>
+                    </div>
+
+                    <div class="generator-layout">
+                        <div class="generator-form glass-card">
+                            <div class="form-group">
+                                <label>Target Job Title</label>
+                                <input type="text" id="cl-title" class="premium-input" placeholder="e.g. Senior Product Designer">
+                            </div>
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" id="cl-company" class="premium-input" placeholder="e.g. Acme Corp">
+                            </div>
+                            <div class="form-group">
+                                <label>Job Description</label>
+                                <textarea id="cl-jd" class="premium-input" rows="6" placeholder="Paste the JD here for maximum alignment..."></textarea>
+                            </div>
+                            <button id="cl-generate-btn" class="btn-primary w-100 rounded-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Draft Cover Letter</button>
+                        </div>
+
+                        <div class="generator-output glass-card">
+                            <div class="output-header flex-between mb-16 border-bottom pb-12">
+                                <strong class="text-light">Document Editor</strong>
+                                <button class="btn-icon-text" id="cl-copy" disabled><i class="fa-regular fa-copy"></i> Copy</button>
+                            </div>
+                            <div id="cl-editor" class="text-editor" contenteditable="true">
+                                <div class="empty-editor text-center text-light mt-48">
+                                    <i class="fa-solid fa-file-pen" style="font-size: 40px; margin-bottom: 16px; opacity: 0.3;"></i>
+                                    <p>Your personalized cover letter will stream here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ============================ -->
+                <!-- 4. LINKEDIN REVIEW TAB       -->
+                <!-- ============================ -->
+                <div id="linkedin-tab" class="spa-tab hidden fade-in">
+                    <div class="welcome-banner glass-card" style="background: linear-gradient(135deg, rgba(10, 102, 194, 0.1), rgba(10, 102, 194, 0.05));">
+                        <h1>LinkedIn Profile Optimizer 🚀</h1>
+                        <p class="text-light">Analyze your headline and summary to attract top recruiters.</p>
+                    </div>
+
+                    <div class="generator-layout">
+                        <div class="generator-form glass-card">
+                            <div class="form-group">
+                                <label>LinkedIn Profile URL</label>
+                                <input type="url" id="li-url" class="premium-input" placeholder="linkedin.com/in/yourname">
+                            </div>
+                            <div class="form-group">
+                                <label>Target Industry</label>
+                                <input type="text" id="li-industry" class="premium-input" placeholder="e.g. FinTech, Healthcare...">
+                            </div>
+                            <button id="li-btn" class="btn-primary w-100 rounded-btn" style="background: #0a66c2; border-color: #0a66c2;"><i class="fa-brands fa-linkedin"></i> Analyze Profile</button>
+                        </div>
+                        <div class="generator-output glass-card" id="li-output" style="align-items:flex-start; overflow-y:auto; display:block;">
+                            <div class="text-center text-light flex-center" style="height:100%; flex-direction:column;" id="li-empty-state">
+                                <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 40px; margin-bottom: 16px; opacity: 0.3;"></i>
+                                <p>Awaiting URL to provide AI feedback.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ============================ -->
+                <!-- 5. JOB TRACKER TAB           -->
+                <!-- ============================ -->
+                <div id="job-tracker-tab" class="spa-tab hidden fade-in">
+                    <div class="flex-between mb-24">
+                        <div>
+                            <h1>Opportunity Tracker 📋</h1>
+                            <p class="text-light">Manage your interview pipeline in one place.</p>
+                        </div>
+                        <button class="btn-primary"><i class="fa-solid fa-plus"></i> Add Job</button>
+                    </div>
+
+                    <div class="kanban-board">
+                        <div class="kanban-column glass-card p-16">
+                            <div class="column-header">Wishlist <span class="badge">1</span></div>
+                            <div class="kanban-card">
+                                <h4>Frontend Developer</h4>
+                                <p class="company text-light">Stripe</p>
+                                <div class="card-meta"><span>Added 2d ago</span> <i class="fa-brands fa-stripe" style="color: #635bff; font-size: 20px;"></i></div>
+                            </div>
+                        </div>
+                        <div class="kanban-column glass-card p-16">
+                            <div class="column-header">Applied <span class="badge">2</span></div>
+                            <div class="kanban-card">
+                                <h4>Software Engineer</h4>
+                                <p class="company text-light">Google</p>
+                                <div class="card-meta"><span>Applied 1w ago</span> <i class="fa-brands fa-google" style="color: #ea4335;"></i></div>
+                            </div>
+                            <div class="kanban-card">
+                                <h4>React Developer</h4>
+                                <p class="company text-light">Vercel</p>
+                                <div class="card-meta"><span>Applied 3d ago</span> <i class="fa-solid fa-play" style="transform: rotate(-90deg);"></i></div>
+                            </div>
+                        </div>
+                        <div class="kanban-column glass-card p-16">
+                            <div class="column-header">Interviewing <span class="badge">1</span></div>
+                            <div class="kanban-card border-accent">
+                                <h4>Full Stack Engineer</h4>
+                                <p class="company text-light">Netflix</p>
+                                <div class="card-meta"><span>Round 2</span> <i class="fa-brands fa-neos" style="color: #e50914; font-size: 20px;"></i></div>
+                            </div>
+                        </div>
+                        <div class="kanban-column glass-card p-16">
+                            <div class="column-header">Offers <span class="badge">0</span></div>
+                            <p class="text-center text-light mt-24 text-sm">Keep applying!<br>Your breakthrough is near.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================ -->
+                <!-- 6. SETTINGS TAB              -->
+                <!-- ============================ -->
+                <div id="settings-tab" class="spa-tab hidden fade-in">
+                    <div class="welcome-banner glass-card" style="background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(16, 185, 129, 0.1));">
+                        <h1>Account Settings ⚙️</h1>
+                        <p class="text-light">Manage your profile details and preferences.</p>
+                    </div>
+                    <div class="generator-layout">
+                        <div class="generator-form glass-card">
+                            <h3 style="margin-bottom: 24px;">Personal Information</h3>
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" id="set-fname" class="premium-input" placeholder="e.g. John">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" id="set-lname" class="premium-input" placeholder="e.g. Doe">
+                            </div>
+                            <div class="form-group">
+                                <label>Avatar Background Color (Hex without #)</label>
+                                <input type="text" id="set-bgColor" class="premium-input" placeholder="e.g. 0D8ABC">
+                            </div>
+                            <button id="save-profile-btn" class="btn-primary w-100 rounded-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                        </div>
+                        <div class="generator-output glass-card flex-center">
+                            <div class="text-center text-light">
+                                <div class="avatar" style="margin-bottom: 16px;">
+                                    <img id="settings-avatar-preview" src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" style="width: 100px; height: 100px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); object-fit: cover;">
+                                </div>
+                                <div style="display:flex; justify-content:center; gap:8px; margin-bottom: 24px;">
+                                    <input type="file" id="set-avatar-img" accept="image/*" hidden>
+                                    <button class="btn-outline rounded-btn" style="padding: 6px 12px; font-size:12px;" onclick="document.getElementById('set-avatar-img').click()"><i class="fa-solid fa-camera"></i> Upload</button>
+                                    <button class="btn-outline rounded-btn" style="padding: 6px 12px; font-size:12px; color:var(--danger); border-color:var(--danger);" id="remove-avatar-btn"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                                <h3 id="settings-name-preview" style="color: var(--text-main); margin-bottom: 8px;">User</h3>
+                                <p>Live Preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals go here (Resume Viewer & Delete Confirm) -->
+    <div id="global-modal" class="modal-overlay hidden">
+        <div class="modal glass-card" id="modal-content-area">
+            <!-- Injected by JS -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
