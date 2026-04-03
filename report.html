@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer - Software Engineering Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-main: #333;
+            --text-light: #666;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .report-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 3rem 4rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        h1 {
+            color: var(--accent-dark);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+
+        h3 {
+            color: #475569;
+            margin-top: 1.5rem;
+        }
+
+        p, li {
+            color: var(--text-light);
+            font-size: 1.05rem;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+        }
+
+        .diagram-container {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+        }
+        
+        .diagram-title {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        .highlight {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1rem;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .report-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="report-container">
+        <header>
+            <h1>Software Engineering Project Report</h1>
+            <p><strong>Project Title:</strong> AI Resume Analyzer System (Powered by Google Gemini)</p>
+        </header>
+
+        <section>
+            <h2>1. Problem Statement</h2>
+            <p>In today's highly competitive job market, recruiters receive hundreds of applications for a single role, making manual screening time-consuming and prone to human bias. Consequently, many qualified candidates are filtered out by traditional Applicant Tracking Systems (ATS) because their resumes lack exact-match keywords.</p>
+            <p>Job seekers lack accessible, intelligent tools to evaluate how well their resumes are written. There is a critical need for an automated, context-aware system that can parse, analyze, and score a resume while providing actionable, personalized improvement tips to the candidate.</p>
+        </section>
+
+        <section>
+            <h2>2. Research Findings & Analysis</h2>
+            <h3>Existing Systems vs. Proposed AI System</h3>
+            <ul>
+                <li><strong>Existing Solutions:</strong> Rely heavily on basic keyword matching. They fail to understand semantic meaning, context of achievements, or abstract soft skills.</li>
+                <li><strong>Our Proposed Solution:</strong> Leverages Large Language Models (LLMs) like Google Gemini. It reads the resume like a human recruiter, understanding the depth of experience and returning a precise score with dynamic tips.</li>
+            </ul>
+
+            <h3>Feasibility Study</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>Technical Feasibility:</strong> Achievable using modern web tech (HTML/CSS/JS) for a responsive front-end and lightweight API calls to Gemini.</li>
+                    <li><strong>Operational Feasibility:</strong> Drop-zone UI requires zero user training. Logic can easily be adapted for No-Code tools like Glide/Bubble.</li>
+                    <li><strong>Economic Feasibility:</strong> Cloud-based LLM APIs offer cost-effective, pay-as-you-go infrastructure.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. System Design</h2>
+            
+            <h3>3.1 System Architecture Diagram</h3>
+            <div class="diagram-title">Fig 1: High-Level Architecture</div>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    graph LR
+                        A[Job Seeker] -->|Uploads PDF/DOC| B(Frontend UI HTML/CSS/JS)
+                        B -->|Text Extraction| C{API Gateway / Backend}
+                        C -->|Sends Prompt| D[(Google Gemini AI)]
+                        D -->|Returns JSON Score & Tips| C
+                        C -->|Updates DOM| B
+                        B -->|Displays Dashboard| A
+                        
+                        style A fill:#e2e8f0,stroke:#64748b,stroke-width:2px
+                        style B fill:#bfdbfe,stroke:#3b82f6,stroke-width:2px
+                        style C fill:#fef08a,stroke:#eab308,stroke-width:2px
+                        style D fill:#c7d2fe,stroke:#6366f1,stroke-width:2px
+                </div>
+            </div>
+
+            <h3>3.2 Process Flowchart</h3>
+            <div class="diagram-title">Fig 2: Application Workflow</div>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart TD
+                        Start([Start]) --> Upload[/Upload Resume Document/]
+                        Upload --> Validate{Valid Format?}
+                        Validate -- No --> Error[Show Error Message] --> Upload
+                        Validate -- Yes --> Extract[Extract Text from Document]
+                        Extract --> Loading[Show 'Gathering Insights' UI]
+                        Loading --> API[Call Gemini AI API]
+                        API --> Parse[Parse AI Response]
+                        Parse --> Display[Render Score & Improvement Tips]
+                        Display --> End([End])
+
+                        style Start fill:#fecaca,stroke:#ef4444
+                        style End fill:#fecaca,stroke:#ef4444
+                        style Validate fill:#fed7aa,stroke:#f97316
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Testing and Results</h2>
+            <h3>4.1 Testing Methodologies</h3>
+            <ul>
+                <li><strong>Unit Testing:</strong> Tested the file upload component continuously. Ensures only <code>.pdf</code>, <code>.doc</code>, and <code>.docx</code> formats bypass validation.</li>
+                <li><strong>Integration Testing:</strong> Verified the transition states (Upload Screen &rarr; Loading Screen &rarr; Results Dashboard). Ensured timeout functions simulate the API wait accurately.</li>
+                <li><strong>UI/UX Testing:</strong> Validated the mathematical logic behind the Circular Progress Bar to ensure the CSS conic-gradient exactly matches the final score percentage. Assessed responsiveness across desktop and mobile views.</li>
+            </ul>
+
+            <h3>4.2 Conclusion & Results</h3>
+            <p>The AI Resume Analyzer successfully demonstrates a paradigm shift from rigid keyword-based ATS systems to intelligent evaluation. The web interface provides a seamless experience, successfully transitioning between file upload, processing logic, and the final animated dashboard. The structured approach allows easy future integration with live APIs or no-code backends, effectively solving the stated problem.</p>
+        </section>
+    </div>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>
